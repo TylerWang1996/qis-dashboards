@@ -601,13 +601,17 @@ Parallel builders own data/tests and model/tests respectively. The primary integ
 |---|---|---|
 | 1. Foundation and contracts | Package/configuration imports; private owner/remote verified | Complete: locked environment and imports verified; GitHub confirms owner TylerWang1996 and isPrivate=true. Foundation checkpoint 8158ad4. |
 | 2. Data and holdings | Canonical holdings example, scaling, missingness, allocation and timing checks | Complete: 29 data tests pass; independent reviewer found no blocking defect. Includes exact 100→105→99.75 example, gap recovery, historical numeric cutoffs, and deterministic CSV roundtrip. |
-| 3. Estimation and current risk | Direct-reference EWMA, eligibility, no leakage, current-risk identities | In progress: assigned to model builder. |
-| 4. Attribution and stress | Shapley/pair reconciliations and stress identities | Pending milestone 3. |
-| 5. Complete diagnostics | Correct sensitivity/weekly/percentile samples and reproducibility | Pending milestone 3. |
+| 3. Estimation and current risk | Direct-reference EWMA, eligibility, no leakage, current-risk identities | Complete: direct finite-history reference and gap/lag/count tests pass. Independent 200-case covariance/Euler check agrees within 1.11e-16. |
+| 4. Attribution and stress | Shapley/pair reconciliations and stress identities | Complete: independent Shapley coalition reference, pair decompositions, zero-volatility endpoints, stress limits and scaling checks pass. |
+| 5. Complete diagnostics | Correct sensitivity/weekly/percentile samples and reproducibility | Complete: 57 model tests pass. Reviewer verified fixes for complete calendar-month percentiles, duplicate scenario rejection, and unavailable zero-volatility sensitivity ranks. No outstanding model-review blocker. |
 | 6. Notebook and HTML | Fresh-kernel run-all; offline report parity; visual inspection | In progress: primary integration. |
 | 7. Review and delivery | Full checks; documented benchmark; clean committed notebook; verified private main push | Pending integration. |
 
 Use three focused test files for data, model, and report, including Appendix G cases. CI runs Ruff, pytest, and a fresh-kernel notebook test. Benchmark ten strategies and approximately 5,000 dates locally: aim for analysis under five seconds after imports and notebook execution under thirty seconds. Record hardware and timings; do not use machine-sensitive CI timing assertions. Record evidence and commit each accepted checkpoint.
+
+Acceptance mapping: data tests cover Appendix G holdings/timing/scaling, invalid allocations, missing observations, and calendar contracts. Model tests cover EWMA initialization/gaps/leakage, contribution and concentration identities, Shapley, correlation/uniform-volatility stresses, singular/negative/single/zero-exposure cases, denominator availability, model changes, and diagnostic history. Report tests cover stable signed top-pair reconciliation, unavailable reports, display invariance, embedded assets, a thin clean notebook, and exact fresh-kernel notebook/HTML parity. The complete integration suite currently passes 98 tests.
+
+Percentile reference membership uses calendar-month buckets from current month minus 36 through current month minus one, then retains valid completed snapshots. A weekend/holiday month-end does not shorten the reference window. Stress fractions and multipliers must be unique. Sensitivity rank, baseline rank, rank change, and sign change are unavailable when their required pair contributions are undefined.
 
 #### I.5 Durable goal
 
