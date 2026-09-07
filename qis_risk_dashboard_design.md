@@ -599,8 +599,8 @@ Parallel builders own data/tests and model/tests respectively. The primary integ
 
 | Milestone | Acceptance gate | Status / evidence |
 |---|---|---|
-| 1. Foundation and contracts | Package/configuration imports; private owner/remote verified | In progress: interfaces and ownership fixed; Python environment and remote setup underway. |
-| 2. Data and holdings | Canonical holdings example, scaling, missingness, allocation and timing checks | In progress: assigned to data builder. |
+| 1. Foundation and contracts | Package/configuration imports; private owner/remote verified | Complete: locked environment and imports verified; GitHub confirms owner TylerWang1996 and isPrivate=true. Foundation checkpoint 8158ad4. |
+| 2. Data and holdings | Canonical holdings example, scaling, missingness, allocation and timing checks | Complete: 29 data tests pass; independent reviewer found no blocking defect. Includes exact 100→105→99.75 example, gap recovery, historical numeric cutoffs, and deterministic CSV roundtrip. |
 | 3. Estimation and current risk | Direct-reference EWMA, eligibility, no leakage, current-risk identities | In progress: assigned to model builder. |
 | 4. Attribution and stress | Shapley/pair reconciliations and stress identities | Pending milestone 3. |
 | 5. Complete diagnostics | Correct sensitivity/weekly/percentile samples and reproducibility | Pending milestone 3. |
