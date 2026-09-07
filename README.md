@@ -1,4 +1,4 @@
-# QIS portfolio risk dashboard
+# QIS Portfolio Risk Dashboard
 
 A local notebook and offline HTML report for reviewing diversification and correlation risk in a long-only portfolio of excess-return indices. Calculations live in a small Python package, outside the notebook.
 
@@ -31,6 +31,8 @@ For example, if the file ends on a Friday that is the month's final trading clos
 
 The notebook exposes `ModelConfig` for numerical settings and `DisplayConfig` for chart history, pair count, and heatmap visibility. Display settings never change the estimation sample. Default publication requires 504 common daily returns and 444 lag-standardized vectors, so provide more than five years of input for a complete three-year chart window. Weekly diagnostics require 104 complete paired intervals; DR percentiles require 24 valid prior monthly snapshots.
 
+The report includes a signed strategy risk-contribution waterfall, a correlation-clustered official matrix labeled with its configured trading-day half-life, and an expanded glossary of metrics and sensitivities. Clustering changes only the matrix's display order; every numerical result retains the model's original conventions. Contributions are ordered from largest to smallest, including negative and zero contributions, and sum to portfolio volatility.
+
 The portfolio is a synthetic excess-return book, not funded NAV. Currency conversion occurs upstream; collateral yield, costs, financing adjustments, flows, allocation optimization, and forecast calibration are outside this version.
 
 ## Development
@@ -42,9 +44,9 @@ uv run pytest
 
 Read `qis_risk_dashboard_design.md` for methodology, acceptance checks, and build progress. Real inputs, generated HTML, executed notebook copies, and caches are ignored by Git. Only the explicitly simulated example CSVs are committed.
 
-The implementation has 98 passing tests, including direct numerical references and a fresh-kernel notebook test that verifies exact HTML/display parity. An independent reviewer also checked 200 random valid correlation/exposure cases against separately assembled covariance calculations.
+The implementation has 114 passing tests, including direct numerical references and a fresh-kernel notebook test that verifies exact HTML/display parity. The original independent review checked 200 random valid correlation/exposure cases against separately assembled covariance calculations. The presentation update additionally passed 60 independent matrix/portfolio cases, including 32 with negative strategy contributions.
 
-On an AMD Ryzen 9 PRO 8945HS running Linux and Python 3.13.12, analysis of 5,000 dates × 10 strategies took **1.21 seconds** (median of three warmed runs); the complete demo notebook took **2.65 seconds** in a fresh kernel. The standalone demo HTML is approximately **288 KB**. Timings are observational, not CI thresholds.
+On an AMD Ryzen 9 PRO 8945HS running Linux and Python 3.13.12, analysis of 5,000 dates × 10 strategies took **1.23 seconds** (median of three warmed runs); the complete demo notebook took **2.83 seconds** in a fresh kernel. The standalone demo HTML is approximately **325 KB**. Timings are observational, not CI thresholds.
 
 For a local analysis timing check:
 

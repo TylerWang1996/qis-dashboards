@@ -7,7 +7,12 @@ name = "qis-risk"
 version = "0.1.0"
 description = "Portfolio correlation and diversification review for excess-return indices"
 requires-python = ">=3.13,<3.14"
-dependencies = ["numpy>=2.2", "pandas>=2.2", "matplotlib>=3.10"]
+dependencies = [
+    "numpy>=2.2",
+    "pandas>=2.2",
+    "matplotlib>=3.10",
+    "scipy>=1.15",
+]
 
 [dependency-groups]
 notebook = ["jupyterlab>=4.3", "ipykernel>=6.29", "nbclient>=0.10", "nbformat>=5.10"]
