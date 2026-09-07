@@ -306,6 +306,7 @@ def _json(value):
 
 def _appendix(result):
     current = result.current
+    config = result.metadata.get("model_config", {})
     pieces = ['<section><span class="eyebrow">Technical detail</span><h2>Model, holdings &amp; diagnostics</h2><details><summary>Open technical appendix</summary>']
     if current is not None:
         pieces += ["<h3>Holdings and strategy risk</h3>", _table(current.strategies, index=True, formats={
@@ -333,7 +334,15 @@ def _appendix(result):
             fields = value.reset_index().columns if indexed else value.columns
             columns = {c: str(c).replace("_", " ").title() + (" (vol pts)" if c in point_columns else " (%)" if c in percent_columns else "") for c in fields}
             pieces += [f'<details><summary>{title}</summary>', _table(value, columns, formats, index=indexed), "</details>"]
-    pieces += ['<p class="note">Weekly diagnostics compare paired daily and non-overlapping weekly samples over the trailing 36 calendar months, with 252/52 annualization and at least 104 valid weekly intervals. Lag-one autocorrelations preserve calendar gaps. These are empirical diagnostics, separate from the official EWMA model.</p>', "<h3>Historical DR percentile</h3>", _json(result.diagnostics.get("dr_percentile", {}))]
+    weekly_note = (
+        f'Weekly diagnostics compare paired daily and non-overlapping weekly samples over the trailing '
+        f'{config.get("weekly_history_months", 36)} calendar months, with '
+        f'{config.get("annualization", 252):g}/{config.get("weekly_annualization", 52):g} annualization '
+        f'and at least {config.get("weekly_min_intervals", 104)} valid weekly intervals. '
+        'Lag-one autocorrelations preserve calendar gaps. These are empirical diagnostics, '
+        'separate from the official EWMA model.'
+    )
+    pieces += [f'<p class="note">{escape(weekly_note)}</p>', "<h3>Historical DR percentile</h3>", _json(result.diagnostics.get("dr_percentile", {}))]
     pieces += ['<details><summary>Coverage, validation and availability</summary>', _json({k: v for k, v in result.diagnostics.items() if not isinstance(v, pd.DataFrame)}), "</details>"]
     pieces += ['<details><summary>Model configuration and run provenance</summary>', _json(result.metadata), "</details>"]
     pieces += ['''<details><summary>Methodology and interpretation</summary>

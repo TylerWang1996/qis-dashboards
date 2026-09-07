@@ -120,6 +120,10 @@ def test_display_changes_do_not_mutate_analytical_outputs(review):
     pd.testing.assert_frame_equal(review.attribution["pairs"], before.attribution["pairs"])
     assert review.current.metrics == before.current.metrics
     assert review.metadata == before.metadata
+    changed = copy.deepcopy(review)
+    changed.metadata["model_config"].update(weekly_history_months=24, weekly_min_intervals=80, annualization=260)
+    changed_html = render_report(changed, DisplayConfig(show_heatmap=False))
+    assert "trailing 24 calendar months, with 260/52 annualization and at least 80 valid weekly intervals" in changed_html
 
 
 @pytest.mark.parametrize("status", ["unavailable", "failed"])
